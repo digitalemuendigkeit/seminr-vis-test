@@ -8,12 +8,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(remotes)
 
-remotes::install_github("digitalemuendigkeit/seminr", 
-                        ref = "model-viz", force = TRUE, upgrade = "never")
+
 
 library(seminr)
 library(DiagrammeR)
 ```
+
+
 ```{r modelcode}
 mobi <- mobi
 
