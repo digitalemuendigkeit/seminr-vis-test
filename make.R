@@ -1,3 +1,4 @@
 # This file runs all test documents
 
-rmarkdown::render("template.Rmd", "output/template.html")
+rmarkdown::render(input = "template.Rmd", output_file = "output/template.html")
+rmarkdown::render(input = "simple_case.Rmd", output_file = "output/simple_case.html")
