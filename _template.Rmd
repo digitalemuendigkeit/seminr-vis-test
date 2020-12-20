@@ -46,7 +46,7 @@ mobi <- mobi
 ```
 
 ```{r viscode}
-  plot_model(mobi_pls) %>% DiagrammeR::grViz()
+   mobi_pls %>% seminr::seminr_plot() %>% grViz() 
 ```
 
 

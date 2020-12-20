@@ -1,0 +1,55 @@
+---
+title: "Test cases for seminr visualization"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(remotes)
+
+
+
+library(seminr)
+library(DiagrammeR)
+```
+
+
+```{r modelcode}
+mobi <- mobi
+
+measurements <- constructs(
+  reflective("Image",       multi_items("IMAG", 1:5)),
+  reflective("Expectation", multi_items("CUEX", 1:3)),
+  reflective("Loyalty",     multi_items("CUSL", 1:3)),
+  reflective("Complaints",  single_item("CUSCO"))
+)
+
+# Create four relationships (two regressions) in one line!
+structure <- relationships(
+  paths(from = c("Image", "Expectation"), to = c("Loyalty", "Complaints"))
+)
+
+
+pls_model <- estimate_pls(
+  data = mobi,
+  measurement_model = measurements,
+  structural_model = structure
+)
+```
+
+
+```{r modelcode2}
+pls_model %>% seminr_plot(theme = seminr_theme_smartpls()) %>% grViz()
+
+pls_model %>% seminr_plot() %>% grViz()
+
+seminr_theme_set(seminr_theme_smartpls())
+
+pls_model %>% seminr_plot() %>% grViz()
+
+```
+
+
+
+

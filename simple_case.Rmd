@@ -30,7 +30,11 @@ library(DiagrammeR)
 ```
 
 ```{r viscode}
-  plot_model(mobi_pls) %>% DiagrammeR::grViz()
+seminr_theme_set(seminr_theme_smartpls())
+mobi_pls %>% seminr_plot() %>% grViz()
 ```
 
+```{r}
+mobi_pls %>% seminr_plot()
+```
 
