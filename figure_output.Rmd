@@ -34,7 +34,4 @@ seminr_theme_set(seminr_theme_smartpls())
 mobi_pls %>% dot_graph() %>% grViz()
 ```
 
-```{r}
-mobi_pls %>% dot_graph() %>% grViz()
-```
 

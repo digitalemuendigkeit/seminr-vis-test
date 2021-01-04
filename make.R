@@ -5,6 +5,9 @@ library(stringr)
 # run test files
 files <- dir(pattern = "*.Rmd")
 
+# remove the readme
+files <- files[!files %in% c("README.Rmd")]
+
 output <- str_replace(files, ".Rmd", ".html")
 output <- paste0("output/", output)
 

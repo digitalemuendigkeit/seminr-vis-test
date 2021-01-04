@@ -40,13 +40,17 @@ pls_model <- estimate_pls(
 
 
 ```{r modelcode2}
-pls_model %>% seminr_plot(theme = seminr_theme_smartpls()) %>% grViz()
+pls_model %>% dot_graph(theme = seminr_theme_smartpls()) %>% grViz()
+pls_model %>% dot_graph(theme = seminr_theme_default()) %>% grViz()
 
-pls_model %>% seminr_plot() %>% grViz()
+pls_model %>% dot_graph() %>% grViz()
 
 seminr_theme_set(seminr_theme_smartpls())
 
-pls_model %>% seminr_plot() %>% grViz()
+pls_model %>% dot_graph() %>% grViz()
+
+
+pls_model %>% dot_graph(theme = seminr_theme_create(plot.fontname = "Fira Sans")) %>% grViz()
 
 ```
 

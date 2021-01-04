@@ -1,0 +1,140 @@
+---
+title: "Test cases for seminr visualization"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(remotes)
+library(seminr)
+library(DiagrammeR)
+library(DiagrammeRsvg)
+
+library(hcictools)
+library(dataforsocialscience)
+
+
+dataforsocialscience::robo_care_raw
+
+hcictools::auto_score(robo_care_raw, "KUT")
+
+```
+
+```{r modelcode}
+  mobi <- mobi
+
+   #seminr syntax for creating measurement model
+   mobi_mm <- constructs(
+                reflective("Image",        multi_items("IMAG", 1:5)),
+                reflective("Expectation",  multi_items("CUEX", 1:3))
+              )
+   #seminr syntax for creating structural model
+   mobi_sm <- relationships(
+     paths(from = "Image",        to = c("Expectation"))
+   )
+
+   mobi_pls <- estimate_pls(data = mobi,
+                            measurement_model = mobi_mm,
+                            structural_model = mobi_sm)
+```
+
+```{r viscode}
+seminr_theme_set(seminr_theme_smartpls())
+mobi_pls %>% dot_graph() %>% grViz()
+
+summary(mobi_pls)
+```
+
+```{r}
+library(haven)
+library(dplyr)
+robo_care_raw %>% names()
+```
+
+
+```{r}
+robo_care_raw %>% 
+   na.omit() %>% 
+   mutate_all(zap_labels) %>% 
+   select(starts_with("KUT"), 
+          starts_with("DIFFPREF"), 
+          starts_with("TK"), 
+          starts_with("CAMCON"), 
+          starts_with("CAREX"), 
+          starts_with("PRIVCON"), 
+          starts_with("AUTOT"),
+          starts_with("robo")) -> my_data
+
+
+
+
+
+mm <- constructs(
+   reflective("KUT", multi_items("KUT", 1:8)),
+   reflective("DIFFPREF", multi_items("DIFFPREF", 1:4)),
+   reflective("TK", multi_items("TK", 1:4)),
+   reflective("CAMCON", multi_items("CAMCON", 1:4)),
+   reflective("CAREX", multi_items("CAREX", 1:4)),
+   reflective("PRIVCON", multi_items("PRIVCON", 1:4)),
+   reflective("AUTOT", multi_items("AUTOT", 1:2))#,
+   #composite("ROBOCARE", names(my_data %>% select(starts_with("robo"))) )
+)
+
+sm <- relationships(
+   paths(from = "KUT", to = c("PRIVCON"))#,
+   #paths(from = "KUT", to = "ROBOCARE")
+   
+)
+
+
+res <- seminr::estimate_cfa(my_data, mm)
+sres <- summary(res)
+sres
+```
+
+
+```{r}
+mm %>% plot_model()
+
+var(my_data)
+
+my_model <- estimate_pls(my_data, measurement_model = mm, structural_model = sm)
+
+my_model %>% seminr::plot_model()
+```
+
+
+```{r}
+summary(my_model)
+
+boot <- bootstrap_model(my_model, nboot = 100)
+
+
+
+summary(boot)
+
+my_model %>% dot_graph() %>% grViz()
+```
+
+
+```{r create_pdf}
+library(DiagrammeRsvg)
+library(rsvg)
+svg <- my_model %>% 
+   dot_graph() %>% 
+   grViz() %>% 
+   export_svg() 
+
+svg %>% 
+   charToRaw() %>%  
+   rsvg_pdf("graph.pdf")
+```
+
+
+```{r fast_print}
+library(htmltools)
+html_print(HTML(svg))
+```
+
+
