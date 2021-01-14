@@ -30,14 +30,14 @@ mobi <- mobi
                 composite("Complaints",   single_item("CUSCO")),
                 composite("Loyalty",      multi_items("CUSL", 1:3)),
                 higher_composite("Reputation", c("Image", "Expectation")),
-                higher_composite("Goodness", c("Quality", "Value"), weights = mode_B)           
+                higher_composite("Goodness", c("Quality", "Value"), weights = mode_B),
+                interaction_term("Complaints", "Satisfaction")
               )
    #seminr syntax for creating structural model
    mobi_sm <- relationships(
      paths(from = "Reputation",        to = c("Satisfaction", "Loyalty", "Goodness")),
      paths(from = "Goodness",      to = c("Satisfaction")),
-     paths(from = "Satisfaction", to = c("Complaints", "Loyalty")),
-     paths(from = "Complaints",   to = "Loyalty")
+     paths(from = c("Satisfaction", "Complaints", "Complaints*Satisfaction"), to = "Loyalty")
    )
 
    mobi_pls <- estimate_pls(data = mobi,
