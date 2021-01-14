@@ -95,30 +95,30 @@ sres
 
 
 ```{r}
-mm %>% plot_model()
+#mm %>% plot_model()
 
-var(my_data)
+#var(my_data)
 
 my_model <- estimate_pls(my_data, measurement_model = mm, structural_model = sm)
 
-my_model %>% seminr::plot_model()
+#my_model %>% seminr::plot_model()
 ```
 
 
 ```{r}
 summary(my_model)
 
-boot <- bootstrap_model(my_model, nboot = 100)
+#boot <- bootstrap_model(my_model, nboot = 100)
 
 
 
-summary(boot)
+#summary(boot)
 
-my_model %>% dot_graph() %>% grViz()
+#my_model %>% dot_graph() %>% grViz()
 ```
 
 
-```{r create_pdf}
+```{r create_pdf, eval=FALSE, include=FALSE}
 library(DiagrammeRsvg)
 library(rsvg)
 svg <- my_model %>% 
@@ -132,7 +132,7 @@ svg %>%
 ```
 
 
-```{r fast_print}
+```{r fast_print, eval=FALSE, include=FALSE}
 library(htmltools)
 html_print(HTML(svg))
 ```

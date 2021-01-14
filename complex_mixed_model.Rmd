@@ -18,6 +18,8 @@ library(DiagrammeR)
 ```{r modelcode}
 mobi <- mobi
 
+mobi$PERV1 <- 8- mobi$PERV1 
+
    #seminr syntax for creating measurement model
    mobi_mm <- constructs(
                 reflective("Image",        multi_items("IMAG", 1:5)),

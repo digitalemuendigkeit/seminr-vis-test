@@ -38,3 +38,14 @@ mobi_pls %>% dot_graph() %>% grViz()
 mobi_pls %>% dot_graph() %>% grViz()
 ```
 
+
+
+
+
+
+```{r}
+boot_mobi <- bootstrap_model(mobi_pls)
+
+plot_model(boot_mobi)
+```
+

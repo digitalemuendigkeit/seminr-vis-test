@@ -1,0 +1,102 @@
+---
+title: "Strukturgleichungsmodellierung mit SEMinR"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#remotes::install_github("statisticsforsocialscience/dataforsocialscience")
+library(dataforsocialscience)
+
+library(semPlot)
+library(haven)
+library(tidyverse)
+
+library(seminr)
+
+
+robo_care <- robo_care_labelled %>% haven::zap_labels() %>% mutate(age = as.numeric(age))
+```
+
+
+# Was ist Strukturgleichungsmodellierung?
+
+Viele mathematisch formulierte Modelle (Korrelationen und lineare Regressionen) lassen sich auch als graphische Modelle darstellen.
+Diese sind einerseits einfacher zu deuten und andererseits, wenn es um komplexere Beziehungen geht auch leichter zu formulieren.
+
+
+```{r}
+names(robo_care)
+```
+
+
+```{r lm_as_sem}
+linear_model <- lm(formula =  robo_bed ~ KUT, data = robo_care)
+semPaths(linear_model)
+
+summary(linear_model)
+semPaths(linear_model, whatLabels = "std", what = "std")
+```
+
+
+```{r lm_as_sem2}
+linear_model <- lm(formula =  robo_bed ~ AUTOT, data = robo_care)
+semPaths(linear_model)
+
+summary(linear_model)
+semPaths(linear_model, whatLabels = "std", what = "std")
+```
+
+```{r lm_as_sem3}
+linear_model <- lm(formula =  robo_bed ~ KUT + AUTOT, data = robo_care)
+semPaths(linear_model)
+
+summary(linear_model)
+semPaths(linear_model, whatLabels = "std", what = "std")
+```
+
+
+```{r lm_as_sem4}
+linear_model <- lm(formula =  robo_bed ~ KUT * AUTOT, data = robo_care)
+semPaths(linear_model)
+
+summary(linear_model)
+semPaths(linear_model, whatLabels = "std", what = "std")
+```
+
+
+```{r lm_as_sem_seq}
+linear_model1 <- lm(formula =  robo_bed ~ AUTOT, data = robo_care)
+linear_model2 <- lm(formula =  AUTOT ~ KUT, data = robo_care)
+
+semPaths(linear_model1)
+semPaths(linear_model2)
+
+summary(linear_model)
+semPaths(linear_model1, whatLabels = "std", what = "std")
+semPaths(linear_model2, whatLabels = "std", what = "std")
+
+``` 
+# Messmodell ist geschluckt
+
+```{r lm_as_mm}
+linear_model_mm <- lm(formula =  KUT ~ KUT1 + KUT2 + KUT3 + KUT4 + KUT5 + KUT6 + KUT6 + KUT7 + KUT8, data = robo_care)
+semPaths(linear_model_mm)
+
+summary(linear_model_mm)
+semPaths(linear_model_mm, whatLabels = "std", what = "std")
+```
+
+
+```{r}
+
+messmodell <- constructs(reflective("KUT_NEU", multi_items("KUT", 1:8)))
+
+model <- seminr::estimate_cfa(robo_care, messmodell)
+
+semPlot::semPaths(model$lavaan_model, "std")
+
+robo_care_raw$KUT1
+
+```
+

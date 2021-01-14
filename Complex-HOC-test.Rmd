@@ -17,7 +17,7 @@ library(dplyr)
 
 
 ```{r modelcode}
-testdata <- as.matrix(read.csv2("HOC-test-data.csv")[,2:104])
+testdata <- as.matrix(read.csv2("data/HOC-test-data.csv")[,2:104])
 
 
 # Make measurement model
