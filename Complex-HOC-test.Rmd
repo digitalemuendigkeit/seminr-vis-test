@@ -98,8 +98,8 @@ testmodel <- estimate_pls(testdata, mmcc, smcc)
 ```
 
 ```{r viscode}
-   testmodel %>% seminr::dot_graph() %>% grViz() 
-   # mobi_pls %>% seminr::dot_graph() %>% grViz() 
+  
+plot_model(testmodel)
 ```
 
 
